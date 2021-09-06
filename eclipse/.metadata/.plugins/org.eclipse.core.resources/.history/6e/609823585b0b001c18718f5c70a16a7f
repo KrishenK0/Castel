@@ -1,0 +1,5 @@
+package fr.krishenk.castel.client;
+
+public class SyncPlayerPropsMessage {
+
+}

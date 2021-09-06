@@ -1,0 +1,11 @@
+package fr.krishenk.castel.server.packet;
+
+import java.io.IOException;
+
+import net.minecraft.network.PacketBuffer;
+
+public abstract class AbstractMessage<T extends AbstractMessage<T>> implements IMessage, IMessageHandler {
+	protected abstract void read(PacketBuffer buf) throws IOException;
+	
+	protected abstract void write(PacketBuffer buf) throws IOException;
+}

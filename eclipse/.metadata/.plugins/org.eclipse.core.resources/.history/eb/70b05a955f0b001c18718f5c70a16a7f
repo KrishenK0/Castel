@@ -1,0 +1,36 @@
+package fr.krishenk.castel.server.events;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import fr.krishenk.castel.client.SyncPlayerPropsMessage;
+import fr.krishenk.castel.server.packet.ExtendedPlayer;
+import fr.krishenk.castel.server.packet.PacketDispatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+
+public class EventHandler {
+
+	@SubscribeEvent
+	public void onEntityConstructing(EntityConstructing event) {
+		if (event.entity instanceof EntityPlayer) {
+			if (ExtendedPlayer.get((EntityPlayer) event.entity) == null) {
+				ExtendedPlayer.register((EntityPlayer) event.entity);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onJoinWorld(EntityJoinWorldEvent event) {
+		if (event.entity instanceof EntityPlayerMP) {
+			PacketDispatcher.sendTo(new SyncPlayerPropsMessage((EntityPlayer) event.entity),
+					(EntityPlayerMP) event.entity);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onClonePlayer(PlayerEvent.Clone event) {
+		ExtendedPlayer.get(event.entityPlayer).copy(ExtendedPlayer.get(event.original));
+	}
+}

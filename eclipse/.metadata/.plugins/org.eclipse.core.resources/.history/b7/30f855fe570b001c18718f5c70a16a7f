@@ -1,0 +1,37 @@
+package fr.krishenk.castel.server.packet.impl;
+
+import java.io.IOException;
+
+import org.apache.logging.log4j.core.AbstractServer;
+
+import cpw.mods.fml.relauncher.Side;
+import fr.krishenk.castel.server.packet.AbstractMessage.AbstractServerMessage;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
+
+public class OpenGuiPacket extends AbstractServerMessage<OpenGuiPacket> {
+
+	private int id;
+
+	public OpenGuiPacket() {
+	}
+
+	@Override
+	protected void read(PacketBuffer buf) throws IOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void write(PacketBuffer buf) throws IOException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void process(EntityPlayer player, Side side) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,18 @@
+package fr.krishenk.castel.client.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+
+public class SlotArmor extends Slot {
+	final int armorType;
+	
+	final EntityPlayer player;
+
+	public SlotArmor(EntityPlayer player, IInventory inventory, int slotIndex, int x, int y, int armorType) {
+		super(inventory, slotIndex, x, y);
+		this.player = player;
+		this.armorType = armorType;
+	}
+
+}

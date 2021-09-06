@@ -1,0 +1,31 @@
+package fr.krishenk.castel.server.packet;
+
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
+import fr.krishenk.castel.Castel;
+import fr.krishenk.castel.server.packet.impl.OpenGuiPacket;
+
+public class PacketDispatcher {
+	
+	private static byte packetId = 0;
+	
+	private static final SimpleNetworkWrapper dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(Castel.MODID);
+	
+	public static final void registerPackets() {
+		registerMessage(OpenGuiPacket.class);
+	}
+	
+	private static final <T extends AbstractMessage<T> & IMessageHandler<T, IMessage>> void registerMessage(Class<T> cls) {
+		if(AbstractMessage.AbstractClientMessage.class.isAssignableFrom(cls)) {
+			PacketDispatcher.dispatcher.registerMessage(cls, cls, packetId++, Side.CLIENT);
+		} else if (AbstractMessage.AbstractServerMessage.class.isAssignableFrom(cls)) {
+			PacketDispatcher.dispatcher.registerMessage(cls, cls, packetId++, Side.SERVER);
+		} else {
+			PacketDispatcher.dispatcher.registerMessage(cls, cls, packetId++, Side.CLIENT);
+			PacketDispatcher.dispatcher.registerMessage(cls, cls, packetId++, Side.SERVER);
+		}
+	}
+}

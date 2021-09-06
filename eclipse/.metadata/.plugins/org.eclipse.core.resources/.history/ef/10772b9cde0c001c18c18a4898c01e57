@@ -1,0 +1,20 @@
+package fr.krishenk.castel.client.utils;
+
+
+
+import java.util.logging.Logger;
+
+import com.ibm.icu.util.Calendar;
+
+import net.minecraft.pathfinding.Path;
+
+public class LoggerManager {
+	public static LoggerManager instance;
+	private Calendar calendar = Calendar.getInstance();
+	private Logger logger;
+
+	public LoggerManager(Logger logger, Path logFile) {
+		this.logger = logger;
+		this.logger.addHandler(new LoggerHandler(logFile));
+	}
+}

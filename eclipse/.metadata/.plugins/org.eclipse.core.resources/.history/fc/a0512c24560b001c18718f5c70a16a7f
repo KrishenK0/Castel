@@ -1,0 +1,44 @@
+package fr.krishenk.castel.server.packet;
+
+import java.io.IOException;
+
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.relauncher.Side;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
+
+public abstract class AbstractMessage<T extends AbstractMessage<T>> implements IMessage, IMessageHandler {
+	protected abstract void read(PacketBuffer buf) throws IOException;
+	
+	protected abstract void write(PacketBuffer buf) throws IOException;
+	
+	public abstract void process(EntityPlayer player, Side side);
+	
+	protected boolean isValidOnSide(Side side) {
+		return true;
+	}
+	
+	protected boolean requiresMainThread() {
+		return true;
+	}
+	
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		try {
+			read(new PacketBuffer(buf));
+		} catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+	
+	@Override
+	public void toBytes(ByteBuf buf) {
+		try {
+			write(new PacketBuffer(buf));
+		} catch (IOException e) {
+			throw Throwables.propagate(e);
+		}
+	}
+}

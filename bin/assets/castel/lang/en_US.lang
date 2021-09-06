@@ -1,0 +1,5 @@
+item.wizardWand.name=Wizard Wand
+item.staffElemental.name=Staff Elemental
+
+key.desc = "Open Inventory"
+key.label = "Castel Inventory"

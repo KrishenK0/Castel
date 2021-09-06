@@ -1,0 +1,78 @@
+package fr.krishenk.castel.client.gui;
+
+import java.text.NumberFormat;
+
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
+
+public class GUICastel extends GuiScreen {
+
+	public String factionName = "TEXXXXXXXXXXXXXXXXXXXXT";
+	public String factionStats = "Créateur : KrishenK  Puissance : 715/800  Level : 77";
+	public int factionBank = 1234567890;
+
+	public Minecraft mc;
+
+	public GUICastel() {
+	}
+
+	@Override
+	public void initGui() {
+	}
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float ticks) {
+		super.drawScreen(mouseX, mouseY, ticks);
+	}
+
+	public void drawGuiBackground(ResourceLocation bg, int guiX, int guiY, int xSize, int ySize, boolean worldBG) {
+		GL11.glPushMatrix();
+		GL11.glColor4f(1f, 1f, 1f, 1f);
+		if (!worldBG)
+			drawWorldBackground(0);
+		mc.renderEngine.bindTexture(bg);
+		GuiScreen.func_152125_a(guiX, guiY, 0, 0, xSize, ySize, xSize, ySize, 512, 512);
+		GL11.glPopMatrix();
+	}
+
+	public void drawScaledCustomSizeModalRect(ResourceLocation texture, int guiX, int guiY, int u, int v, int du,
+			int dv, int width, int height, int tileX, int tileY) {
+		GL11.glPushMatrix();
+		GL11.glColor4f(1f, 1f, 1f, 1f);
+		mc.renderEngine.bindTexture(texture);
+		GuiScreen.func_152125_a(guiX, guiY, u, v, du, dv, width, height, tileX, tileY);
+		GL11.glPopMatrix();
+	}
+
+	public void drawCenteredString(String text, int x, int y, int c) {
+		this.fontRendererObj.drawString(text, x - this.fontRendererObj.getStringWidth(text) / 2, y, c);
+	}
+
+	public void drawScaledString(String text, int x, int y, int color, float scale, boolean centered, boolean shadow) {
+		GL11.glPushMatrix();
+		GL11.glScalef(scale, scale, scale);
+		float newX = x;
+		if (centered)
+			newX = x - this.fontRendererObj.getStringWidth(text) * scale / 2.0F;
+		if (shadow)
+			this.fontRendererObj.drawString(text, (int) (newX / scale), (int) ((y + 1) / scale),
+					(color & 0xFCFCFC) >> 2 | color & 0xFF000000, false);
+		this.fontRendererObj.drawString(text, (int) (newX / scale), (int) (y / scale), color, false);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	public String numeroFormat(int var1) {
+		String var2 = String.valueOf(var1);
+		String var3 = "";
+		for (int i = var2.length(); i > 0; i--) {
+			if (i % 3 == 0)
+				var3 += " ";
+			var3 += var2.charAt(var2.length() - i);
+		}
+		return var3;
+	}
+}

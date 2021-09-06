@@ -1,0 +1,39 @@
+package fr.krishenk.castel.client;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import fr.krishenk.castel.client.gui.override.GUICustomInventory;
+import fr.krishenk.castel.server.packet.ExtendedPlayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+
+public class ClientEventHandler {
+	INSTANCE;
+	
+	static {
+		
+	}
+	
+	@SubscribeEvent()
+	public void onGameOverlay(RenderGameOverlayEvent.Pre event) {
+		System.out.println("test");
+		ExtendedPlayer ep = ExtendedPlayer.get(Minecraft.getMinecraft().thePlayer);
+		if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
+			event.setCanceled(true);
+			return;
+		}
+	}
+
+	@SubscribeEvent()
+	public void onGUIOpened(GuiOpenEvent event) {
+		System.out.println(event);
+		if (event.gui != null && event.gui instanceof net.minecraft.client.gui.inventory.GuiInventory
+				&& !(Minecraft.getMinecraft()).thePlayer.worldObj.isRemote) {
+			System.out.println("test");
+			event.gui = (GuiScreen) new GUICustomInventory((EntityPlayer)(Minecraft.getMinecraft()).thePlayer);
+		}
+	}
+	
+}

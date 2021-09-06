@@ -1,0 +1,67 @@
+package fr.krishenk.castel.client.gui.faction;
+
+import java.util.ArrayList;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import fr.krishenk.castel.Castel;
+import fr.krishenk.castel.client.gui.GUICustomButton;
+import fr.krishenk.castel.client.gui.GUICastel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.ResourceLocation;
+
+@SideOnly(Side.CLIENT)
+public class GUIFactionMain extends GUICastel {
+	
+	private final List<TabGui> TABS = new ArrayList<>();
+
+	private final ResourceLocation bg = new ResourceLocation(Castel.MODID, "textures/gui/factionMain.png");
+
+	private final int xSize = 240;
+	private final int ySize = 233;
+
+	private int guiX;
+	private int guiY;
+
+	private GUICustomButton factionBank;
+
+	public GUIFactionMain(Minecraft mc) {
+		this.mc = mc;
+	}
+
+	@Override
+	public void initGui() {
+		guiX = (this.width - this.xSize) / 2;
+		guiY = (this.height - this.ySize) / 2;
+
+		buttonList.clear();
+		//buttonList.add(factionBank = new GUICustomButton(0, (guiX + xSize) , guiY+20, bg, ""));
+	}
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float ticks) {
+		drawGuiBackground(bg, guiX, guiY, xSize, ySize, false);
+		
+		drawCenteredString(factionName, this.width/2, this.height/2-109, 0x636363);
+		drawScaledString(factionStats, (int) this.width / 2, (int) this.height / 2 - 8, 0xFFFFFF, 0.7F, true, false);
+		
+		
+		mc.renderEngine.bindTexture(bg);
+
+
+		super.drawScreen(mouseX, mouseY, ticks);
+		this.func_152125_a((guiX + xSize)+3 , guiY+24, 0, 265, 18, 18, 18, 18, 512, 512);
+	}
+
+	@Override
+	public void actionPerformed(GuiButton button) {
+		switch (button.id) {
+		case 0:
+			button.displayString = "";
+			Minecraft.getMinecraft().displayGuiScreen(new GUIFactionBank(Minecraft.getMinecraft()));
+		}
+
+		super.actionPerformed(button);
+	}
+}

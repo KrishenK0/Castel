@@ -1,0 +1,28 @@
+package fr.krishenk.castel.server.events;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import fr.krishenk.castel.server.packet.ExtendedPlayer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+
+public class EventHandler {
+
+	@SubscribeEvent
+	public void onEntityConstructing(EntityConstructing event) {
+		if (event.entity instanceof EntityPlayer) {
+			if (ExtendedPlayer.get((EntityPlayer) event.entity) == null) {
+				ExtendedPlayer.register((EntityPlayer) event.entity);
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onJoinWorld(EntityJoinWorldEvent event) {
+		if(event.entity instanceof EntityPlayerMP) {
+			
+		}
+	}
+
+}

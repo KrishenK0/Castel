@@ -1,0 +1,16 @@
+package fr.krishenk.castel.client.utils;
+
+import org.apache.logging.log4j.Logger;
+
+import cpw.mods.fml.relauncher.Side;
+
+public interface IProxy {
+	String localize(String unlocalized);
+	String localize(String unlocalized, Object... args);
+	
+	default void logPhysicalSide(Logger logger) {
+		logger.debug("Physical Side: " + getPhysicalSide());
+	}
+	
+	Side getPhysicalSide();
+}

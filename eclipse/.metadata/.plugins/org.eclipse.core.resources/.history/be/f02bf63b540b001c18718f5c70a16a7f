@@ -1,0 +1,87 @@
+package fr.krishenk.castel.client.gui;
+
+import java.util.EnumSet;
+
+import org.lwjgl.input.Keyboard;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+
+public class GuiKeyHandler extends KeyHandler {
+	/** Store Minecraft so we don't have to get it each time */
+	private final Minecraft mc;
+
+	/** Not really important. I use it to store/find keys in the config file */
+	public static final String label = "Tutorial Key";
+
+	/** Key index for easy handling */
+	public static final int CUSTOM_INV = 0;
+
+	/** Key descriptions */
+	private static final String[] desc = {"Custom Inventory"};
+
+	/** Default key values */
+	private static final int[] keyValues = {Keyboard.KEY_O};
+
+	/** Stores custom keybindings for easy reference */
+	public static final KeyBinding[] keys = new KeyBinding[desc.length];
+
+	/**
+	 * This will initialize all key bindings and create a new key handler; you can
+	 * pass in a Configuration file if you want to read default key values from
+	 * your config, but the settings can be changed in game, too.
+	 */
+	public static void init() {
+		boolean[] repeat = new boolean[desc.length];
+		for (int i = 0; i < desc.length; ++i) {
+			keys[i] = new KeyBinding(desc[i], keyValues[i]);
+			repeat[i] = false;
+		}
+
+		KeyBindingRegistry.registerKeyBinding(new TutKeyHandler(keys, repeat));
+	}
+
+	private GuiKeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) {
+		super(keyBindings, repeatings);
+		this.mc = Minecraft.getMinecraft();
+	}
+
+	@Override
+	public String getLabel() {
+		return this.label;
+	}
+
+	@Override
+	public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
+	{
+		if (tickEnd)
+		{
+			// if you don't want the key firing while in chat or a gui is open, check if the game is in focus:
+			if (mc.inGameHasFocus) {
+				if (kb == keys[CUSTOM_INV]) {
+					// Send a packet to the server using a method we'll create in the next step
+					TutorialPacketHandler.sendOpenGuiPacket(TutorialMain.GUI_CUSTOM_INV);
+					// opening the gui server side automatically opens the client side as well,
+					// so we don't need to do anything else
+				}
+			} else {
+				// a gui is open; in 1.6.4 and earlier, you can close the GUI from here:
+				if (kb == keys[CUSTOM_INV] && player.openContainer instanceof ContainerCustomPlayer) {
+					// in 1.7.2, you need to do this from your custom GUI class instead
+					player.closeScreen();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
+		// Don't need to do anything here!
+	}
+
+	@Override
+	public EnumSet<TickType> ticks() {
+		// We're only interested in player ticks, as that's when the keyboard will fire
+		return EnumSet.of(TickType.PLAYER);
+	}
+}

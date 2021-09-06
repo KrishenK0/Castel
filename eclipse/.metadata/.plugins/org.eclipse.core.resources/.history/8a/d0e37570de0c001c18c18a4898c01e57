@@ -1,0 +1,5 @@
+package fr.krishenk.castel.client.utils;
+
+public class LoggerManager {
+
+}

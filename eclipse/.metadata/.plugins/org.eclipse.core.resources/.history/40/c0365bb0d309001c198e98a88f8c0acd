@@ -1,0 +1,9 @@
+package fr.krishenk.castel.server.packet;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+public interface IExtendedEntityProperties {
+	public void saveNBTData(NBTTagCompound compound);
+	
+	public void loadNBTData(NBTTagCompound compound);
+}

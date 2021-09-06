@@ -1,0 +1,25 @@
+package fr.krishenk.castel.client.gui;
+
+import cpw.mods.fml.common.network.IGuiHandler;
+import fr.krishenk.castel.client.gui.override.GUICustomInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+
+public class GuiHandler implements IGuiHandler {
+	public static final int CASTEL_MENU_GUI_ID = 1;
+
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return null;
+	}
+
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if(ID == CASTEL_MENU_GUI_ID) {
+			
+		}
+		return null;
+	}
+	
+	
+}
