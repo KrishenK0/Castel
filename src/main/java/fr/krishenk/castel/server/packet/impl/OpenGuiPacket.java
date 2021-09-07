@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 import fr.krishenk.castel.Castel;
 import fr.krishenk.castel.server.packet.AbstractMessage.AbstractServerMessage;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.network.PacketBuffer;
 
 public class OpenGuiPacket extends AbstractServerMessage<OpenGuiPacket> {
