@@ -16,6 +16,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
@@ -31,8 +33,6 @@ public class GUIFactionMain extends GuiScreen {
 	private int guiX;
 	private int guiY;
 
-	private GUICustomButton factionBank;
-
 	private static Minecraft mc;
 
 	public GUIFactionMain(Minecraft mc) {
@@ -46,8 +46,14 @@ public class GUIFactionMain extends GuiScreen {
 		guiY = (this.height - this.ySize) / 2;
 
 		buttonList.clear();
-		for (int i = 0; i < TABS.size(); i++) {
-			buttonList.add(new GUICustomButton(i, (guiX + xSize), guiY + 20 + 50 * i, "").bindTexture(bg, 512, 512)
+		int i;
+		for (i = 0; i < Math.floor((float)(TABS.size()) / 2); i++) {
+			buttonList.add(new GUICustomButton(i, (guiX - 26), guiY + 20 + 50 * i, "").bindTexture(bg, 512, 512)
+					.setButtonDim(26, 233, 26, 32));
+		}
+		
+		for (int j = 0; j < Math.ceil((float)(TABS.size()) / 2); j++) {
+			buttonList.add(new GUICustomButton(j+i, (guiX + xSize), guiY + 20 + 50 * j, "").bindTexture(bg, 512, 512)
 					.setButtonDim(0, 233, 26, 32));
 		}
 	}
@@ -64,10 +70,17 @@ public class GUIFactionMain extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, ticks);
 		// this.func_152125_a((guiX + xSize) + 3, guiY + 24, 0, 265, 18, 18, 18, 18,
 		// 512, 512);
-
-		for (int i = 0; i < TABS.size(); i++) {
-			this.func_152125_a((guiX + xSize) + 2, guiY + 26 + 50 * i, 18 * i, 265, 18, 18, 18, 18, 512, 512);
+		int i;
+		for (i = 0; i < Math.floor((float)(TABS.size()) / 2); i++) {
+			GUICastel.drawScaledCustomSizeModalRect(guiX - 20, guiY + 26 + 50 * i, 18 * i, 265, 18, 18, 18, 18, 512,
+					512);
 		}
+
+		for (int j = 0; j < Math.ceil((float)(TABS.size()) / 2); j++) {
+			GUICastel.drawScaledCustomSizeModalRect(guiX + xSize + 2, guiY + 26 + 50 * j, 18 * (j + i), 265, 18, 18, 18,
+					18, 512, 512);
+		}
+
 	}
 
 	@Override
@@ -96,7 +109,7 @@ public class GUIFactionMain extends GuiScreen {
 				Minecraft.getMinecraft().displayGuiScreen(new GUIFactionBank(Minecraft.getMinecraft()));
 			}
 		});
-		
+
 		TABS.add(new TabGui() {
 			public Class<? extends GuiScreen> getClassReferent() {
 				return (Class) GUICustomInventory.class;
@@ -105,6 +118,26 @@ public class GUIFactionMain extends GuiScreen {
 			public void call() {
 				Minecraft.getMinecraft().displayGuiScreen(new GUICustomInventory((EntityPlayer) mc.thePlayer,
 						mc.thePlayer.inventory, ExtendedPlayer.get((EntityPlayer) mc.thePlayer).inventory));
+			}
+		});
+
+		TABS.add(new TabGui() {
+			public Class<? extends GuiScreen> getClassReferent() {
+				return (Class) GUIFactionPerm.class;
+			}
+
+			public void call() {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("SETTINGS"));
+			}
+		});
+		
+		TABS.add(new TabGui() {
+			public Class<? extends GuiScreen> getClassReferent() {
+				return (Class) GUIFactionFlag.class;
+			}
+
+			public void call() {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("FLAG"));
 			}
 		});
 	}

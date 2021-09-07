@@ -26,8 +26,6 @@ public class FactionInfosPacket extends AbstractServerMessage<FactionInfosPacket
 
 	@Override
 	protected void read(PacketBuffer buf) throws IOException {
-		//System.out.println(buf);
-		//System.out.println(buf.readInt());
 		this.factionInfos = (HashMap<String, Object>)(new Gson()).fromJson(buf.readStringFromBuffer(1024), (new TypeToken<HashMap<String, Object>>() {}).getType());
 	}
 
