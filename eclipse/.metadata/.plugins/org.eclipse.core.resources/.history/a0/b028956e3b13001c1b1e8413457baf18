@@ -1,0 +1,32 @@
+package fr.krishenk.castel.client.gui;
+
+import fr.krishenk.castel.Castel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+
+public class GUIScrollBarFaction extends Gui {
+	protected float x;
+	protected float y;
+	protected int width;
+	protected int height;
+	protected boolean dragging;
+	protected float sliderValue = 0.0F;
+	protected boolean selected;
+	protected boolean isPressed = false;
+	protected float increment = 0.05F;
+	
+	public GUIScrollBarFaction(float x, float y, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = 4;
+		this.height = height;
+	}
+	
+	public void setScrollIncrement(float i) {
+		this.increment = i;
+	}
+	
+	protected void drawScroller() {
+		Minecraft.getMinecraft().renderEngine.bindTexture(Castel.MODID, "textures/gui/factionMain.png");
+	}
+}
