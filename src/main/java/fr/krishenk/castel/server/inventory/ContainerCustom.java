@@ -1,7 +1,6 @@
-package fr.krishenk.castel.client.inventory;
+package fr.krishenk.castel.server.inventory;
 
 import fr.krishenk.castel.client.items.ItemElementStaff;
-import fr.krishenk.castel.server.inventory.NewInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

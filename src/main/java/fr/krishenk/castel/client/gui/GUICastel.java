@@ -1,11 +1,19 @@
 package fr.krishenk.castel.client.gui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 
 @SideOnly(Side.CLIENT)
@@ -14,13 +22,26 @@ public class GUICastel extends Gui {
 	public static String factionName = "TEXXXXXXXXXXXXXXXXXXXXT";
 	public static String factionStats = "Créateur : KrishenK  Puissance : 715/800  Level : 77";
 	public static int factionBank = 1234567890;
+	public static ArrayList<String> playerOnline = new ArrayList() {
+		{
+			add("_KrishenK_");
+			add("player1");
+			add("player2");
+			add("player3");
+			add("player4");
+			add("player5");
+			add("player6");
+		}
+	};
+
+	private GUIScrollBarFaction scrollBarOnline;
 
 	public Minecraft mc;
 
-	public static void drawGuiBackground(int guiX, int guiY, int xSize, int ySize) {
+	public static void drawGuiBackground(int guiX, int guiY, int xSize, int ySize, int tileX, int tileY) {
 		GL11.glPushMatrix();
 		GL11.glColor4f(1f, 1f, 1f, 1f);
-		drawScaledCustomSizeModalRect(guiX, guiY, 0, 0, xSize, ySize, xSize, ySize, 512, 512);
+		drawScaledCustomSizeModalRect(guiX, guiY, 0, 0, xSize, ySize, xSize, ySize, tileX, tileY);
 		GL11.glPopMatrix();
 	}
 
@@ -85,4 +106,34 @@ public class GUICastel extends Gui {
 		}
 		return var3;
 	}
+
+
+	public static void startGlScissor(int x, int y, int width, int height) {
+		Minecraft mc = Minecraft.getMinecraft();
+		ScaledResolution reso = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+
+		double scaleW = (double) mc.displayWidth / reso.getScaledWidth_double();
+		double scaleH = (double) mc.displayHeight / reso.getScaledHeight_double();
+
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		GL11.glScissor((int) Math.floor((double) x * scaleW),
+				(int) Math.floor((double) mc.displayHeight - ((double) (y + height) * scaleH)),
+				(int) Math.floor((double) (x + width) * scaleW) - (int) Math.floor((double) x * scaleW),
+				(int) Math.floor((double) mc.displayHeight - ((double) y * scaleH))
+						- (int) Math.floor((double) mc.displayHeight - ((double) (y + height) * scaleH))); // starts
+																											// from
+																											// lower
+																											// left
+																											// corner
+																											// (minecraft
+																											// starts
+																											// from
+																											// upper
+																											// left)
+	}
+
+	public static void endGLScissor() {
+		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+	}
+
 }

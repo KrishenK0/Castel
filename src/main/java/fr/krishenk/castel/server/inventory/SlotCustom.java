@@ -1,4 +1,4 @@
-package fr.krishenk.castel.client.inventory;
+package fr.krishenk.castel.server.inventory;
 
 import fr.krishenk.castel.client.items.ItemElementStaff;
 import net.minecraft.inventory.IInventory;
