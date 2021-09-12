@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fr.krishenk.castel.Castel;
 import fr.krishenk.castel.client.gui.override.inventory.GUICustomInventory;
-import fr.krishenk.castel.client.inventory.ContainerCustom;
+import fr.krishenk.castel.server.inventory.ContainerCustom;
 import fr.krishenk.castel.server.packet.ExtendedPlayer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;

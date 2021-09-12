@@ -1,4 +1,4 @@
-package fr.krishenk.castel.client.inventory;
+package fr.krishenk.castel.server.inventory;
 
 import javax.swing.Icon;
 

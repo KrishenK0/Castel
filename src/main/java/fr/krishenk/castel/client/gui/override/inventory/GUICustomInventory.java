@@ -12,7 +12,7 @@ import fr.krishenk.castel.client.gui.GUICustomButton;
 import fr.krishenk.castel.client.gui.TabGui;
 import fr.krishenk.castel.client.gui.faction.GUIFactionMain;
 import fr.krishenk.castel.client.gui.override.GUICustomContainer;
-import fr.krishenk.castel.client.inventory.ContainerCustom;
+import fr.krishenk.castel.server.inventory.ContainerCustom;
 import fr.krishenk.castel.server.inventory.NewInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
