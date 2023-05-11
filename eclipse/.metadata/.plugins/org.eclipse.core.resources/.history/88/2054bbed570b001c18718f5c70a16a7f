@@ -1,9 +1,0 @@
-package fr.krishenk.castel.server.packet.impl;
-
-import org.apache.logging.log4j.core.AbstractServer;
-
-import fr.krishenk.castel.server.packet.AbstractMessage.AbstractServerMessage;
-
-public class OpenGuiPacket extends AbstractServerMessage<OpenGuiPacket> {
-
-}

@@ -1,7 +1,0 @@
-package fr.krishenk.castel.server.packet;
-
-public class PacketDispatcher {
-	
-	private static byte packetId = 0;
-
-}

@@ -1,7 +1,0 @@
-package fr.krishenk.castel.client.gui;
-
-import net.minecraft.inventory.Slot;
-
-public class SlotCustom extends Slot {
-
-}

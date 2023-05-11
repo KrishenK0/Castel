@@ -1,8 +1,0 @@
-name: Castel
-version: 1.0
-author: KrishenK
-main: fr.krishenk.castel.main
-commands:
-  test:
-    description: Commmande de test
-    permission: test.use

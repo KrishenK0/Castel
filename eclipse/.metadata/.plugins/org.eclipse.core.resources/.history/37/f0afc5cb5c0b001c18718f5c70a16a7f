@@ -1,5 +1,0 @@
-package fr.krishenk.castel.client.gui;
-
-public abstract class AbstractInventory implements IInventory {
-
-}

@@ -1,5 +1,0 @@
-package fr.krishenk.castel.server.packet;
-
-public abstract class AbstractMessage<T extends AbstractMessage<T>> implements IMessage, IMessageHandler {
-
-}
