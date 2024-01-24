@@ -42,8 +42,6 @@ public class GuiFactionBank extends GuiCastel {
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
         super.mouseMoved(mouseX, mouseY);
-
         isChestOpen = (mouseX >= this.guiX + 77 && mouseX <= this.guiX + 129 && mouseY >= this.guiY + 40 && mouseY <= this.guiY + 79);
-
     }
 }

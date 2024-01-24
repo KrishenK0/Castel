@@ -26,8 +26,8 @@ public class FactionPeSCPacket {
     public static FactionPeSCPacket decode(PacketBuffer buf) {
         FactionInfo factionInfo1 = FactionInfo.getInstance();
         factionInfo1.setTitle(buf.readString());
-        Map<String, Map<String, String>> map = new HashMap<>();
-        factionInfo1.setPermissions(new Gson().fromJson(buf.readString(), map.getClass()));
+//        Map<String, Map<String, String>> map = new HashMap<>();
+//        factionInfo1.setPermissions(new Gson().fromJson(buf.readString(), map.getClass()));
         return new FactionPeSCPacket(factionInfo1);
     }
 

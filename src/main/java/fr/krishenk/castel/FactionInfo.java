@@ -4,20 +4,22 @@ import fr.krishenk.castel.common.fperms.Access;
 import fr.krishenk.castel.common.fperms.Permissable;
 import fr.krishenk.castel.common.fperms.PermissableAction;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FactionInfo {
 
     private static FactionInfo INSTANCE;
-    private String title = null;
-    private List<String> playerOnline = null;
-    private List<String> playerOffline = null;
-    private int power;
-    private int powerMax;
-    private String leaderName;
+    private String title = "";
+    private List<String> playerOnline = new ArrayList<>();
+    private List<String> playerOffline = new ArrayList<>();
+    private int power = 0;
+    private int powerMax = 99;
+    private String leaderName = "System";
     private String leaderId;
-    private Map<String, Map<String, String>> permissions = null;
+    private Map<String, Map<String, String>> permissions = new HashMap<>();
 
 
     public FactionInfo() {
