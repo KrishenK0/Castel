@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: Castel
-Implementation-Version: 0.0.1-1.1.16.5
-Specification-Vendor: krishenk
-Specification-Title: castel
-Implementation-Timestamp: 2023-05-31T23:20:13+0200
-Specification-Version: 1
-Implementation-Vendor: castel
-
