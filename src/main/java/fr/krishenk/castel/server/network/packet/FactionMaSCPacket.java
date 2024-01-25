@@ -4,20 +4,14 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.faction.GuiFaction;
-import fr.krishenk.castel.common.fperms.Access;
-import fr.krishenk.castel.common.fperms.Permissable;
-import fr.krishenk.castel.common.fperms.PermissableAction;
+import fr.krishenk.castel.common.fperms.Rank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class FactionMaSCPacket {
@@ -35,9 +29,7 @@ public class FactionMaSCPacket {
         factionInfo1.setPowerMax(buf.readInt());
         factionInfo1.setLeaderName(buf.readString());
         factionInfo1.setLeaderId(buf.readString());
-//        Map<String, Map<String, String>> map = new HashMap<>();
-//        factionInfo1.setPermissions(new Gson().fromJson(buf.readString(), map.getClass()));
-        new Gson().fromJson(buf.readString(), Set.class);
+        factionInfo1.setRanks(new Gson().fromJson(buf.readString(), new TypeToken<List<Rank>>(){}.getType()));
         factionInfo1.setPlayerOnline(new Gson().fromJson(buf.readString(), List.class));
         factionInfo1.setPlayerOffline(new Gson().fromJson(buf.readString(), List.class));
         return new FactionMaSCPacket(factionInfo1);

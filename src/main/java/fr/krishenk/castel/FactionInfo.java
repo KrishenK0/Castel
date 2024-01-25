@@ -1,13 +1,8 @@
 package fr.krishenk.castel;
 
-import fr.krishenk.castel.common.fperms.Access;
-import fr.krishenk.castel.common.fperms.Permissable;
-import fr.krishenk.castel.common.fperms.PermissableAction;
+import fr.krishenk.castel.common.fperms.Rank;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FactionInfo {
 
@@ -19,7 +14,7 @@ public class FactionInfo {
     private int powerMax = 99;
     private String leaderName = "System";
     private String leaderId;
-    private Map<String, Map<String, String>> permissions = new HashMap<>();
+    private List<Rank> ranks = new ArrayList<>();
 
 
     public FactionInfo() {
@@ -74,10 +69,12 @@ public class FactionInfo {
 
     public void setLeaderId(String leaderId) { this.leaderId = leaderId; }
 
-    public Map<String, Map<String, String>> getPermissions() { return permissions; }
+    public List<Rank> getRanks() { return ranks; }
 
-    public FactionInfo setPermissions(Map<String, Map<String, String>> permissions) {
-        this.permissions = permissions;
+    public FactionInfo setRanks(List<Rank> ranks) {
+        Comparator<Rank> rankComparator = Comparator.comparingInt(Rank::getPriority);
+        Collections.sort(ranks, rankComparator);
+        this.ranks = ranks;
         return this;
     }
 }

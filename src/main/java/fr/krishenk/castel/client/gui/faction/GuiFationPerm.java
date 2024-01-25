@@ -2,14 +2,10 @@ package fr.krishenk.castel.client.gui.faction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
+import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
-import fr.krishenk.castel.common.fperms.Access;
-import fr.krishenk.castel.common.fperms.Permissable;
-import fr.krishenk.castel.common.fperms.PermissableAction;
-import fr.krishenk.castel.common.fperms.Role;
-import fr.krishenk.castel.server.network.PacketHandler;
-import fr.krishenk.castel.server.network.packet.FactionChangePermCSPacket;
+import fr.krishenk.castel.common.fperms.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.ResourceLocation;
@@ -17,16 +13,16 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.antlr.v4.runtime.misc.Triple;
+import org.antlr.v4.runtime.misc.Pair;
 
-import java.util.Map;
+import java.util.List;
 
 public class GuiFationPerm extends GuiCastel {
     protected static ITextComponent title = new TranslationTextComponent("gui.faction.title");
     private ScrollBar permScrollBar;
     private String toolTip = "";
 
-    private Triple<Role, PermissableAction, Access> permSelected = null;
+    private Pair<Rank, Boolean> permSelected = null;
 
     private static GuiFationPerm INSTANCE;
 
@@ -41,6 +37,8 @@ public class GuiFationPerm extends GuiCastel {
                 new FactionTab()
         );
         INSTANCE = this;
+
+        System.out.println(FactionInfo.getInstance().getTitle());
     }
 
     @Override
@@ -77,9 +75,9 @@ public class GuiFationPerm extends GuiCastel {
         if (this.permSelected != null && button == 0) {
             System.out.println(permSelected);
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(
-                    permSelected.c.equals(Access.ALLOW) ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
-                    permSelected.c.equals(Access.ALLOW) ? 0.5F : 0.8F, 0.3F));
-            PacketHandler.CHANNEL.sendToServer(new FactionChangePermCSPacket(permSelected.a, permSelected.a.relation, permSelected.b, permSelected.c));
+                    permSelected.b ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
+                    permSelected.b ? 0.5F : 0.8F, 0.3F));
+//            PacketHandler.CHANNEL.sendToServer(new FactionChangePermCSPacket(permSelected.a, permSelected.a.relation, permSelected.b, permSelected.c));
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -96,11 +94,12 @@ public class GuiFationPerm extends GuiCastel {
     private void renderHeader(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
         int i = 0;
-        for (Role role : Role.values()) {
-            if (role == Role.LEADER) continue;
-            blit(matrixStack, this.guiX + 56 + 25*i, this.guiY + 28, 1+18*i, 210, 16, 16, xSize, ySize);
+        for (Rank rank : getFactionInfo().getRanks()) {
+            if (rank.getPriority() == 0) continue;
+            drawScaledString(matrixStack, rank.getName().substring(0, 2), this.guiX + 56 + 25*i, this.guiY + 32, 1.5F, 0xFFFFFFFF);
+//            blit(matrixStack, this.guiX + 56 + 25*i, this.guiY + 28, 1+18*i, 210, 16, 16, xSize, ySize);
             if (mouseX >= this.guiX + 56 + 25*i && mouseX <= this.guiX + 56+16 + 25*i && mouseY >= this.guiY + 28 && mouseY <= this.guiY + 28+16)
-                setToolTip(role.toString());
+                setToolTip(rank.getName());
             i++;
         }
     }
@@ -114,13 +113,14 @@ public class GuiFationPerm extends GuiCastel {
         int dv = 0;
         int j = 0;
         this.permSelected = null;
-        for (Role role : Role.values()) {
+        for (Rank rank : getFactionInfo().getRanks()) {
             int i = 0;
-            if (role == Role.LEADER) continue;
-            Map<String, String> perms = getFactionInfo().getPermissions().get(role.toString());
+            if (rank.getPriority() == 0) continue;
+            List<Rank.Permission> perms = rank.getPermissions();
             for (PermissableAction permAction : PermissableAction.values()) {
-                Access access = Access.booleanToAccess(perms.get(permAction.getName()).equals("ALLOW"));
-                if (access == null) continue;
+
+                Boolean access = perms.stream().anyMatch(p ->  p.getNamespace().getKey().equals(permAction.getName().toUpperCase()));
+//                if (access == null) continue;
 
                 int offsetX = this.guiX+28 + j*25;
                 Float offsetY = Float.valueOf((this.guiY+52 + i*20) + getSlideOnline());
@@ -134,12 +134,12 @@ public class GuiFationPerm extends GuiCastel {
                             setToolTip(permAction.getDescription());
                     }
                 }
-                blit(matrixStack, offsetX+28, offsetY.intValue(), (access.equals(Access.ALLOW) ? 1 : 19) , 235, 16, 16, xSize, ySize);
+                blit(matrixStack, offsetX+28, offsetY.intValue(), (access ? 1 : 19) , 235, 16, 16, xSize, ySize);
 
                 if (mouseY >= this.guiY+50 && mouseY <= this.guiY+150) {
                     if (mouseX >= offsetX+28 && mouseX <= offsetX+46 && mouseY >= offsetY && mouseY <= offsetY+18) {
-                        setToolTip(access.getName());
-                        this.permSelected = new Triple<>(role, permAction, access);
+                        setToolTip(access ? "ALLOW" : "DENY");
+                        this.permSelected = new Pair<>(rank, access);
                     }
                 }
                 i++;
