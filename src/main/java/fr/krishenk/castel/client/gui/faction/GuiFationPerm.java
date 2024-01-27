@@ -6,6 +6,8 @@ import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
 import fr.krishenk.castel.common.fperms.*;
+import fr.krishenk.castel.server.network.PacketHandler;
+import fr.krishenk.castel.server.network.packet.FactionChangePermCSPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.antlr.v4.runtime.misc.Pair;
+import org.antlr.v4.runtime.misc.Triple;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class GuiFationPerm extends GuiCastel {
     private ScrollBar permScrollBar;
     private String toolTip = "";
 
-    private Pair<Rank, Boolean> permSelected = null;
+    private Triple<Rank, PermissableAction, Boolean> permSelected = null;
 
     private static GuiFationPerm INSTANCE;
 
@@ -75,9 +78,9 @@ public class GuiFationPerm extends GuiCastel {
         if (this.permSelected != null && button == 0) {
             System.out.println(permSelected);
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(
-                    permSelected.b ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
-                    permSelected.b ? 0.5F : 0.8F, 0.3F));
-//            PacketHandler.CHANNEL.sendToServer(new FactionChangePermCSPacket(permSelected.a, permSelected.a.relation, permSelected.b, permSelected.c));
+                    permSelected.c ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
+                    permSelected.c ? 0.5F : 0.8F, 0.3F));
+            PacketHandler.CHANNEL.sendToServer(new FactionChangePermCSPacket(permSelected.a, permSelected.b, permSelected.c));
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -139,7 +142,7 @@ public class GuiFationPerm extends GuiCastel {
                 if (mouseY >= this.guiY+50 && mouseY <= this.guiY+150) {
                     if (mouseX >= offsetX+28 && mouseX <= offsetX+46 && mouseY >= offsetY && mouseY <= offsetY+18) {
                         setToolTip(access ? "ALLOW" : "DENY");
-                        this.permSelected = new Pair<>(rank, access);
+                        this.permSelected = new Triple<>(rank, permAction, access);
                     }
                 }
                 i++;
