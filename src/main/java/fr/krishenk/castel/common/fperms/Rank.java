@@ -1,15 +1,25 @@
 package fr.krishenk.castel.common.fperms;
 
 import java.util.List;
+import java.util.Objects;
 
-public class Rank {
+public class Rank implements Comparable<Rank>, Cloneable {
     private String material;
     private String name;
+    private transient String node;
     private String color;
     private String symbol;
     private int priority;
     private int maxClaims;
     private List<Permission> permissions;
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = Objects.requireNonNull(node, "Rank node cannot be null");
+    }
 
     public String getMaterial() {
         return material;
@@ -65,6 +75,11 @@ public class Rank {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    @Override
+    public int compareTo(Rank rank) {
+        return Integer.compare(this.priority, rank.priority);
     }
 
     public static class Permission {
