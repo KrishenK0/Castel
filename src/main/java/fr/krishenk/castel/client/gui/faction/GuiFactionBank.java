@@ -16,15 +16,7 @@ public class GuiFactionBank extends GuiCastel {
     private boolean isChestOpen = false;
 
     public GuiFactionBank() {
-        super(
-                title,
-                new ResourceLocation(Castel.MODID, "textures/gui/faction-bank.png"),
-                256,
-                286,
-                206,
-                233,
-                new FactionTab()
-        );
+        super(title, new ResourceLocation(Castel.MODID, "textures/gui/faction-bank.png"), 256, 286, 206, 233);
     }
 
     @Override

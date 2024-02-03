@@ -28,18 +28,7 @@ public class GuiFaction extends GuiCastel {
     private ScrollBar offlineScrollBar;
 
     public GuiFaction() {
-        super(
-                title,
-                new ResourceLocation(Castel.MODID, "textures/gui/faction-main.png"),
-                256,
-                256,
-                240,
-                233,
-                new FactionTab()
-        );
-
-        this.playerOnlineList = getFactionInfo().getPlayerOnline();
-        this.playerOfflineList = getFactionInfo().getPlayerOffline();
+        super(title, new ResourceLocation(Castel.MODID, "textures/gui/faction-main.png"), 256, 256, 240, 233);
     }
 
     @Override

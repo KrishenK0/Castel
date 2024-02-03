@@ -25,14 +25,7 @@ public class GuiFactionFlag extends GuiCastel {
 
 
     public GuiFactionFlag() {
-        super(
-                title,
-                new ResourceLocation(Castel.MODID, "textures/gui/faction-flag.png"),
-                256,
-                256,
-                240,
-                233,
-                new FactionTab()
+        super(title, new ResourceLocation(Castel.MODID, "textures/gui/faction-flag.png"), 256, 256, 240, 233
         );
         initPixels();
         addColors();

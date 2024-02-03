@@ -30,18 +30,8 @@ public class GuiFationPerm extends GuiCastel {
     private static GuiFationPerm INSTANCE;
 
     public GuiFationPerm() {
-        super(
-                title,
-                new ResourceLocation(Castel.MODID, "textures/gui/faction-perm.png"),
-                302,
-                256,
-                280,
-                167,
-                new FactionTab()
-        );
+        super(title, new ResourceLocation(Castel.MODID, "textures/gui/faction-perm.png"), 302, 256, 280, 167);
         INSTANCE = this;
-
-        System.out.println(FactionInfo.getInstance().getTitle());
     }
 
     @Override
@@ -97,7 +87,7 @@ public class GuiFationPerm extends GuiCastel {
     private void renderHeader(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
         int i = 0;
-        for (Rank rank : getFactionInfo().getRanks()) {
+        for (Rank rank : getGuild().getRanks()) {
             if (rank.getPriority() == 0) continue;
             drawScaledString(matrixStack, rank.getName().substring(0, 2), this.guiX + 56 + 25*i, this.guiY + 32, 1.5F, 0xFFFFFFFF);
 //            blit(matrixStack, this.guiX + 56 + 25*i, this.guiY + 28, 1+18*i, 210, 16, 16, xSize, ySize);
@@ -116,7 +106,7 @@ public class GuiFationPerm extends GuiCastel {
         int dv = 0;
         int j = 0;
         this.permSelected = null;
-        for (Rank rank : getFactionInfo().getRanks()) {
+        for (Rank rank : getGuild().getRanks()) {
             int i = 0;
             if (rank.getPriority() == 0) continue;
             List<Rank.Permission> perms = rank.getPermissions();

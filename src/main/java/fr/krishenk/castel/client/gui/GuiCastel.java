@@ -1,11 +1,9 @@
 package fr.krishenk.castel.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.faction.FactionTab;
-import fr.krishenk.castel.client.gui.faction.GuiFaction;
+import fr.krishenk.castel.common.constants.group.Guild;
 import net.minecraft.client.MainWindow;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +12,6 @@ import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 public abstract class GuiCastel extends Screen {
     protected ResourceLocation GUI_TEXTURE;
@@ -25,7 +22,7 @@ public abstract class GuiCastel extends Screen {
     protected GuiTab tab;
 
     private final AbastractGuiTab abastractGuiTab;
-    private final FactionInfo factionInfo;
+    private final Guild guild;
 
     protected GuiCastel(ITextComponent titleIn, @Nonnull ResourceLocation resourceLocation, @Nonnull int xSize, @Nonnull int ySize, @Nonnull int guiLeft, @Nonnull int guiTop, AbastractGuiTab tab) {
         super(titleIn);
@@ -35,7 +32,18 @@ public abstract class GuiCastel extends Screen {
         this.guiLeft = guiLeft;
         this.guiTop = guiTop;
         this.abastractGuiTab = tab;
-        this.factionInfo = FactionInfo.getInstance();
+        this.guild = Guild.getInstance();
+    }
+
+    protected GuiCastel(ITextComponent titleIn, @Nonnull ResourceLocation resourceLocation, @Nonnull int xSize, @Nonnull int ySize, @Nonnull int guiLeft, @Nonnull int guiTop) {
+        super(titleIn);
+        this.GUI_TEXTURE = resourceLocation;
+        this.xSize = xSize;
+        this.ySize = ySize;
+        this.guiLeft = guiLeft;
+        this.guiTop = guiTop;
+        this.abastractGuiTab = new FactionTab();
+        this.guild = Guild.getInstance();
     }
 
 
@@ -43,7 +51,7 @@ public abstract class GuiCastel extends Screen {
     protected void init() {
         this.guiX = (this.width - this.guiLeft) / 2;
         this.guiY = (this.height - this.guiTop) / 2;
-        tab = new GuiTab(this, new FactionTab(), this.guiX, this.guiY, this.guiLeft, this.guiTop);
+        tab = new GuiTab(this, this.abastractGuiTab, this.guiX, this.guiY, this.guiLeft, this.guiTop);
         tab.addButtons();
     }
 
@@ -52,7 +60,7 @@ public abstract class GuiCastel extends Screen {
         drawBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         tab.drawTabs(matrixStack);
-        this.drawScaledCenteredString(matrixStack, factionInfo.getTitle(), this.guiX+guiLeft/2, this.guiY+6, 1.5F, TextFormatting.WHITE.getColor());
+        this.drawScaledCenteredString(matrixStack, guild.getName(), this.guiX+guiLeft/2, this.guiY+6, 1.5F, TextFormatting.WHITE.getColor());
     }
 
     public void drawVLine(MatrixStack matrixStack, int x, int minY, int maxY, int width, int color) {
@@ -110,7 +118,7 @@ public abstract class GuiCastel extends Screen {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
-    public FactionInfo getFactionInfo() {
-        return factionInfo;
+    public Guild getGuild() {
+        return guild;
     }
 }
