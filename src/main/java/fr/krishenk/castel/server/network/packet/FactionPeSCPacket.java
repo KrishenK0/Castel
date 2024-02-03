@@ -2,8 +2,8 @@ package fr.krishenk.castel.server.network.packet;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.faction.GuiFationPerm;
+import fr.krishenk.castel.common.constants.group.Guild;
 import fr.krishenk.castel.common.fperms.Rank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -11,25 +11,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class FactionPeSCPacket {
-    FactionInfo factionInfo;
-    public FactionPeSCPacket(FactionInfo factionInfo) {
-        this.factionInfo = factionInfo;
+    Guild guild;
+    public FactionPeSCPacket(Guild guild) {
+        this.guild = guild;
     }
 
     public static void encode(FactionPeSCPacket pkt, PacketBuffer buf) { }
 
     public static FactionPeSCPacket decode(PacketBuffer buf) {
-        FactionInfo factionInfo1 = FactionInfo.getInstance();
-        factionInfo1.setTitle(buf.readString());
-        Map<String, Map<String, String>> map = new HashMap<>();
-        factionInfo1.setRanks(new Gson().fromJson(buf.readString(), new TypeToken<List<Rank>>(){}.getType()));
-        return new FactionPeSCPacket(factionInfo1);
+        Guild guild = Guild.getInstance();
+        guild.getGroup().setName(buf.readString());
+        guild.setRanks(new Gson().fromJson(buf.readString(), new TypeToken<List<Rank>>(){}.getType()));
+        return new FactionPeSCPacket(guild);
     }
 
     public static class Handler {

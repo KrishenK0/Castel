@@ -31,6 +31,8 @@ public class GuiFactionBank extends GuiCastel {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
 
+        this.drawScaledCenteredString(matrixStack, String.valueOf(getGuild().getBank()), this.guiX+this.guiLeft/2, this.guiY+82, 1F, 0xFFFFFF);
+
         this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
         if (isChestOpen) {
             blit(matrixStack, this.guiX + 77, this.guiY + 37, 54, 233,54, 43, xSize, ySize);

@@ -54,17 +54,25 @@ public class GuiFaction extends GuiCastel {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         renderPlayerList(matrixStack, this.guiX + 27, this.guiY + 135, 81, 86, TextFormatting.WHITE.getColor(), mouseX, mouseY, playerOnlineList, onlineScrollBar);
         renderPlayerList(matrixStack, this.guiX + 123, this.guiY + 135, 81, 86, TextFormatting.GRAY.getColor(),mouseX, mouseY, playerOfflineList, offlineScrollBar);
+
+        // Draw members list
+        renderPlayerList(matrixStack, this.guiX + 27, this.guiY + 135, 81, 86, TextFormatting.WHITE.getColor(), mouseX, mouseY, getGuild().getMembersOnline(), onlineScrollBar);
+        renderPlayerList(matrixStack, this.guiX + 123, this.guiY + 135, 81, 86, TextFormatting.GRAY.getColor(), mouseX, mouseY, getGuild().getMembersOffline(), offlineScrollBar);
         this.onlineScrollBar.drawScroller(matrixStack);
         this.offlineScrollBar.drawScroller(matrixStack);
-        super.drawScaledString(matrixStack, "Leader: "+super.getFactionInfo().getLeaderName(),this.guiX+25, this.guiY+109, .75F, 0xFFFFFFFF);
+        super.drawScaledString(matrixStack, "Leader: " + super.getGuild().getLeaderName(), this.guiX + 25, this.guiY + 109, .75F, 0xFFFFFFFF);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (mouseX >= (this.guiX + 27) && mouseX <= (this.guiX + 116) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
+        if (getGuild().getMembersOnline().size() > 4 &&
+                mouseX >= (this.guiX + 27) && mouseX <= (this.guiX + 116) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
             this.onlineScrollBar.scrollHandler(delta);
 
         if (mouseX >= (this.guiX + 123) && mouseX <= (this.guiX + 212) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
+        if (getGuild().getMembersOffline().size() > 4 &&
+                mouseX >= (this.guiX + 123) && mouseX <= (this.guiX + 212) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
             this.offlineScrollBar.scrollHandler(delta);
 
         return super.mouseScrolled(mouseX, mouseY, delta);
