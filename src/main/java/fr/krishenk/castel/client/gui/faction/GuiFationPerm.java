@@ -2,12 +2,11 @@ package fr.krishenk.castel.client.gui.faction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
 import fr.krishenk.castel.common.fperms.*;
 import fr.krishenk.castel.server.network.PacketHandler;
-import fr.krishenk.castel.server.network.packet.FactionChangePermCSPacket;
+import fr.krishenk.castel.server.network.packet.FactionPeCSPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.util.ResourceLocation;
@@ -70,7 +69,7 @@ public class GuiFationPerm extends GuiCastel {
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(
                     permSelected.c ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
                     permSelected.c ? 0.5F : 0.8F, 0.3F));
-            PacketHandler.CHANNEL.sendToServer(new FactionChangePermCSPacket(permSelected.a, permSelected.b, permSelected.c));
+            PacketHandler.CHANNEL.sendToServer(new FactionPeCSPacket(permSelected.a, permSelected.b, permSelected.c));
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
