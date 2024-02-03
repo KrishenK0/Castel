@@ -1,13 +1,11 @@
 package fr.krishenk.castel.common.constants.group;
 
-import fr.krishenk.castel.common.constants.player.RankMap;
 import fr.krishenk.castel.common.fperms.Rank;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public abstract class Group {
     protected transient UUID id;

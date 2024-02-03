@@ -2,9 +2,7 @@ package fr.krishenk.castel.client.gui.faction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;

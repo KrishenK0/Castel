@@ -1,9 +1,6 @@
 package fr.krishenk.castel.common.constants.group;
 
-import fr.krishenk.castel.FactionInfo;
-import fr.krishenk.castel.common.constants.player.RankMap;
 import fr.krishenk.castel.common.fperms.Rank;
-import fr.krishenk.castel.common.utils.SimpleChunkLocation;
 import fr.krishenk.castel.common.utils.TimeUtils;
 import net.minecraft.inventory.Inventory;
 

@@ -5,7 +5,6 @@ import fr.krishenk.castel.client.gui.faction.FactionTab;
 import fr.krishenk.castel.common.Keybinds;
 import fr.krishenk.castel.server.network.PacketHandler;
 import fr.krishenk.castel.server.network.packet.FactionGuiCSPacket;
-import fr.krishenk.castel.server.network.packet.FactionPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;

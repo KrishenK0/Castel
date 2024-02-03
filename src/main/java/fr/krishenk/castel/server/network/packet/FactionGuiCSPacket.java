@@ -1,8 +1,6 @@
 package fr.krishenk.castel.server.network.packet;
 
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.faction.FactionTab;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 

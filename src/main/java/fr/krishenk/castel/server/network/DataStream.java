@@ -4,7 +4,6 @@ import io.netty.handler.codec.EncoderException;
 import net.minecraft.network.PacketBuffer;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class DataStream {
     public static PacketBuffer writeString(PacketBuffer buf, String string) {

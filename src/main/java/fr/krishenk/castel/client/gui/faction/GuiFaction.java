@@ -2,20 +2,22 @@ package fr.krishenk.castel.client.gui.faction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
-import fr.krishenk.castel.common.fperms.Rank;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class GuiFaction extends GuiCastel {
 

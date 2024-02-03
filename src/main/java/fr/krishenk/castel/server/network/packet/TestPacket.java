@@ -1,9 +1,5 @@
 package fr.krishenk.castel.server.network.packet;
 
-import fr.krishenk.castel.client.gui.faction.GuiFaction;
-import fr.krishenk.castel.server.network.DataStream;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;

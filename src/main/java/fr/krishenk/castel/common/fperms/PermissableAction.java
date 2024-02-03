@@ -1,9 +1,5 @@
 package fr.krishenk.castel.common.fperms;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public enum PermissableAction {
 //    BUILD("build", "Grants users access to build."),
 //    DESTROY("destroy", "Grant users access to destroy."),

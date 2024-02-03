@@ -1,6 +1,5 @@
 package fr.krishenk.castel.common.utils;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public class SimpleChunkLocation implements Cloneable {

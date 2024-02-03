@@ -2,15 +2,24 @@ package fr.krishenk.castel.client.gui.faction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.GuiCastel;
+import fr.krishenk.castel.server.network.PacketHandler;
+import fr.krishenk.castel.server.network.packet.FactionFlCSPacket;
+import joptsimple.internal.Strings;
 import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class GuiFactionFlag extends GuiCastel {

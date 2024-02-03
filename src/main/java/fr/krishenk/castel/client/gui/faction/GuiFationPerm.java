@@ -4,7 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import fr.krishenk.castel.Castel;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
-import fr.krishenk.castel.common.fperms.*;
+import fr.krishenk.castel.common.fperms.PermissableAction;
+import fr.krishenk.castel.common.fperms.Rank;
 import fr.krishenk.castel.server.network.PacketHandler;
 import fr.krishenk.castel.server.network.packet.FactionPeCSPacket;
 import net.minecraft.client.Minecraft;
@@ -14,7 +15,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.misc.Triple;
 
 import java.util.List;
@@ -59,8 +59,7 @@ public class GuiFationPerm extends GuiCastel {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.permScrollBar.isMouseHover(mouseX, mouseY) && button == 0)
             this.permScrollBar.setScrollValuePosY(mouseY);
 
