@@ -22,10 +22,6 @@ import java.util.List;
 public class GuiFaction extends GuiCastel {
 
     protected static ITextComponent title = new TranslationTextComponent("gui.faction.title");
-
-    private final List<String> playerOnlineList;
-    private final List<String> playerOfflineList;
-
     private ScrollBar onlineScrollBar;
     private ScrollBar offlineScrollBar;
 
