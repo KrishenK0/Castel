@@ -52,8 +52,19 @@ public class GuiFaction extends GuiCastel {
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        renderPlayerList(matrixStack, this.guiX + 27, this.guiY + 135, 81, 86, TextFormatting.WHITE.getColor(), mouseX, mouseY, playerOnlineList, onlineScrollBar);
-        renderPlayerList(matrixStack, this.guiX + 123, this.guiY + 135, 81, 86, TextFormatting.GRAY.getColor(),mouseX, mouseY, playerOfflineList, offlineScrollBar);
+
+        // DRAW FLAG
+        byte[] imageData = DatatypeConverter.parseBase64Binary(this.getGuild().getFlag());
+        NativeImage image;
+        try {
+            image = NativeImage.read(new ByteArrayInputStream(imageData));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        DynamicTexture texture = new DynamicTexture(image);
+        Minecraft.getInstance().getTextureManager().loadTexture(new ResourceLocation(Castel.MODID, "custom_image"), texture);
+        blit(matrixStack, this.guiX + 65, this.guiY + 32, 0, 0, 110, 62, 110, 62);
 
         // Draw members list
         renderPlayerList(matrixStack, this.guiX + 27, this.guiY + 135, 81, 86, TextFormatting.WHITE.getColor(), mouseX, mouseY, getGuild().getMembersOnline(), onlineScrollBar);
@@ -65,12 +76,10 @@ public class GuiFaction extends GuiCastel {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (mouseX >= (this.guiX + 27) && mouseX <= (this.guiX + 116) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
         if (getGuild().getMembersOnline().size() > 4 &&
                 mouseX >= (this.guiX + 27) && mouseX <= (this.guiX + 116) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
             this.onlineScrollBar.scrollHandler(delta);
 
-        if (mouseX >= (this.guiX + 123) && mouseX <= (this.guiX + 212) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
         if (getGuild().getMembersOffline().size() > 4 &&
                 mouseX >= (this.guiX + 123) && mouseX <= (this.guiX + 212) && mouseY >= (this.guiY + 134) && mouseY <= (this.guiY + 220))
             this.offlineScrollBar.scrollHandler(delta);

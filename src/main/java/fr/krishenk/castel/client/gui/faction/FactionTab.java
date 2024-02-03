@@ -1,9 +1,9 @@
 package fr.krishenk.castel.client.gui.faction;
 
 import fr.krishenk.castel.Castel;
-import fr.krishenk.castel.FactionInfo;
 import fr.krishenk.castel.client.gui.AbastractGuiTab;
 import fr.krishenk.castel.client.gui.ITab;
+import fr.krishenk.castel.common.constants.group.Guild;
 import fr.krishenk.castel.server.network.PacketHandler;
 import fr.krishenk.castel.server.network.packet.FactionGuiCSPacket;
 import net.minecraft.client.Minecraft;
@@ -21,11 +21,12 @@ public class FactionTab extends AbastractGuiTab {
         main,
         flag,
         perm,
-        bank
+        bank,
+        invite
     }
 
     protected ResourceLocation ICONS_TAB_LOCATION = new ResourceLocation(Castel.MODID, "textures/gui/faction-tab.png");
-    private final List<ITab> TABS = new ArrayList<ITab>();
+    private final List<ITab> TABS = new ArrayList<>();
 
     public FactionTab() {
         initTabs();
@@ -76,7 +77,8 @@ public class FactionTab extends AbastractGuiTab {
             }
         });
 
-        if (FactionInfo.getInstance().getLeaderId().equals(Minecraft.getInstance().player.getUniqueID().toString()))
+//        if (FactionInfo.getInstance().getLeaderId().equals(Minecraft.getInstance().player.getUniqueID().toString()))
+        if (Minecraft.getInstance().player != null && Guild.getInstance().getLeader().equals(Minecraft.getInstance().player.getUniqueID())) {
             TABS.add(new ITab() {
                 @Override
                 public Class<? extends Screen> getClassReferent() {
@@ -89,6 +91,20 @@ public class FactionTab extends AbastractGuiTab {
                     return button -> PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(Tab.perm));
                 }
             });
+        }
+
+        TABS.add(new ITab() {
+            @Override
+            public Class<? extends Screen> getClassReferent() {
+                return GuiFactionInvite.class;
+            }
+            @Override
+            public ITextComponent getTitle() { return GuiFactionInvite.title; }
+            @Override
+            public Button.IPressable getPressedAction() {
+                return button -> PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(Tab.invite));
+            }
+        });
     }
 
     @Override

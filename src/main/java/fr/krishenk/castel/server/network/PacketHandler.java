@@ -2,7 +2,6 @@ package fr.krishenk.castel.server.network;
 
 import fr.krishenk.castel.Castel;
 import fr.krishenk.castel.server.network.packet.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
