@@ -25,5 +25,6 @@ public class PacketHandler {
         CHANNEL.registerMessage(packetId++, FactionFlSCPacket.class, FactionFlSCPacket::encode, FactionFlSCPacket::decode, FactionFlSCPacket.Handler::handle);
         CHANNEL.registerMessage(packetId++, FactionPeSCPacket.class, FactionPeSCPacket::encode, FactionPeSCPacket::decode, FactionPeSCPacket.Handler::handle);
         CHANNEL.registerMessage(packetId++, FactionChangePermCSPacket.class, FactionChangePermCSPacket::encode, FactionChangePermCSPacket::decode, FactionChangePermCSPacket.Handler::handle);
+        CHANNEL.registerMessage(packetId++, FactionFlCSPacket.class, FactionFlCSPacket::encode, FactionFlCSPacket::decode, FactionFlCSPacket.Handler::handle);
     }
 }

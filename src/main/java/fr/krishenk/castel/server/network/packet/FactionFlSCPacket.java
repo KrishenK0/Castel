@@ -1,30 +1,29 @@
 package fr.krishenk.castel.server.network.packet;
 
-import com.google.gson.Gson;
-import fr.krishenk.castel.FactionInfo;
-import fr.krishenk.castel.client.gui.faction.GuiFaction;
 import fr.krishenk.castel.client.gui.faction.GuiFactionFlag;
+import fr.krishenk.castel.common.constants.group.Guild;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class FactionFlSCPacket {
-    FactionInfo factionInfo;
-    public FactionFlSCPacket(FactionInfo factionInfo) {
-        this.factionInfo = factionInfo;
+    Guild guild;
+    public FactionFlSCPacket(Guild guild) {
+        this.guild = guild;
     }
 
     public static void encode(FactionFlSCPacket pkt, PacketBuffer buf) { }
 
     public static FactionFlSCPacket decode(PacketBuffer buf) {
-        FactionInfo factionInfo1 = FactionInfo.getInstance();
-        factionInfo1.setTitle(buf.readString());
-        return new FactionFlSCPacket(factionInfo1);
+        Guild guild = Guild.getInstance();
+        guild.getGroup().setName(buf.readString());
+        guild.getGroup().setFlag(buf.readString());
+
+        return new FactionFlSCPacket(guild);
     }
 
     public static class Handler {
@@ -34,9 +33,7 @@ public class FactionFlSCPacket {
         }
 
         public static void handlePacket(FactionFlSCPacket msg, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                Minecraft.getInstance().displayGuiScreen(new GuiFactionFlag());
-            });
+            ctx.get().enqueueWork(() -> Minecraft.getInstance().displayGuiScreen(new GuiFactionFlag()));
             ctx.get().setPacketHandled(true);
         }
     }
