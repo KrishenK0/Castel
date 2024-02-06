@@ -24,6 +24,10 @@ public abstract class GuiCastel extends Screen {
     private final AbastractGuiTab abastractGuiTab;
     private final Guild guild;
 
+    protected GuiCastel(ITextComponent titleIn, @Nonnull ResourceLocation resourceLocation, @Nonnull int xSize, @Nonnull int ySize, @Nonnull int guiLeft, @Nonnull int guiTop) {
+        this(titleIn, resourceLocation, xSize, ySize, guiLeft, guiTop, new FactionTab());
+    }
+
     protected GuiCastel(ITextComponent titleIn, @Nonnull ResourceLocation resourceLocation, @Nonnull int xSize, @Nonnull int ySize, @Nonnull int guiLeft, @Nonnull int guiTop, AbastractGuiTab tab) {
         super(titleIn);
         this.GUI_TEXTURE = resourceLocation;
@@ -35,16 +39,6 @@ public abstract class GuiCastel extends Screen {
         this.guild = Guild.getInstance();
     }
 
-    protected GuiCastel(ITextComponent titleIn, @Nonnull ResourceLocation resourceLocation, @Nonnull int xSize, @Nonnull int ySize, @Nonnull int guiLeft, @Nonnull int guiTop) {
-        super(titleIn);
-        this.GUI_TEXTURE = resourceLocation;
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.guiLeft = guiLeft;
-        this.guiTop = guiTop;
-        this.abastractGuiTab = new FactionTab();
-        this.guild = Guild.getInstance();
-    }
 
 
     @Override
