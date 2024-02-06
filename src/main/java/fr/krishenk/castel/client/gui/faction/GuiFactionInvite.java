@@ -5,7 +5,7 @@ import fr.krishenk.castel.Castel;
 import fr.krishenk.castel.client.gui.GuiCastel;
 import fr.krishenk.castel.client.gui.widget.ScrollBar;
 import fr.krishenk.castel.server.network.PacketHandler;
-import fr.krishenk.castel.server.network.packet.FactionRiCSPacket;
+import fr.krishenk.castel.server.network.packet.FactionGuiCSPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -19,6 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GuiFactionInvite extends GuiCastel {
@@ -28,7 +29,10 @@ public class GuiFactionInvite extends GuiCastel {
     private TextFieldWidget filter;
     private List<String> playerList;
     private Map<String, String> invites;
+    private String selectedPlayer = "";
     private boolean seeInvite = false;
+
+    private static GuiFactionInvite INSTANCE;
 
     public GuiFactionInvite(List<String> playerList, Map<String, String> invites) {
         super(title, new ResourceLocation(Castel.MODID, "textures/gui/faction-invite.png"), 256, 256, 240,233, new FactionTab());
@@ -53,6 +57,7 @@ public class GuiFactionInvite extends GuiCastel {
 
     @Override
     public void onClose() {
+        INSTANCE = null;
         super.onClose();
         this.minecraft.keyboardListener.enableRepeatEvents(false);
     }
@@ -74,11 +79,28 @@ public class GuiFactionInvite extends GuiCastel {
             Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(
                     !getGuild().isRequiresInvite() ? SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF : SoundEvents.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON,
                     !getGuild().isRequiresInvite() ? 0.5F : 0.8F, 0.3F));
-            PacketHandler.CHANNEL.sendToServer(new FactionRiCSPacket(!getGuild().isRequiresInvite()));
+//            PacketHandler.CHANNEL.sendToServer(new FactionRiCSPacket(!getGuild().isRequiresInvite()));
+            this.getMinecraft().player.sendChatMessage("/c requireinvites " + !this.getGuild().isRequiresInvite());
+            try {
+                TimeUnit.MILLISECONDS.sleep(10);
+            } catch (InterruptedException e) {throw new RuntimeException(e);}
+            PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(FactionTab.Tab.invite));
         }
 
         if (button == 0 && mouseX >= this.guiX+205 && mouseX <= this.guiX+224 && mouseY >= this.guiY+47 && mouseY <= this.guiY+65) {
             this.seeInvite = !this.seeInvite;
+        }
+
+        if (!this.selectedPlayer.isEmpty()) {
+            if (this.invites.containsKey(this.selectedPlayer))
+                this.getMinecraft().player.sendChatMessage("/c cancel " + this.selectedPlayer);
+            else
+                this.getMinecraft().player.sendChatMessage("/c invite " + this.selectedPlayer + " " + TimeUnit.HOURS.toMillis(2L));
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(10);
+            } catch (InterruptedException e) {throw new RuntimeException(e);}
+            PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(FactionTab.Tab.invite));
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -101,12 +123,12 @@ public class GuiFactionInvite extends GuiCastel {
         this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
         blit(matrixStack, this.guiX+206, this.guiY+47, 36, 233, 16, 16);
         if (mouseX >= this.guiX+205 && mouseX <= this.guiX+224 && mouseY >= this.guiY+47 && mouseY <= this.guiY+65)
-            this.renderTooltip(matrixStack, new StringTextComponent("See invites"), mouseX, mouseY);
+            this.renderTooltip(matrixStack, new StringTextComponent("See invitations"), mouseX, mouseY);
 
         // Playerlist
         this.playersScrollBar.drawScroller(matrixStack);
         if (this.playerList != null && !this.playerList.isEmpty())
-            renderPlayerList(matrixStack, this.guiX + 18, this.guiY + 90, 201, 123, TextFormatting.WHITE.getColor(), mouseX, mouseY, playersScrollBar);
+            renderPlayerList(matrixStack, this.guiX + 18, this.guiY + 90, 198, 123, TextFormatting.WHITE.getColor(), mouseX, mouseY, playersScrollBar);
     }
 
     @Override
@@ -127,22 +149,57 @@ public class GuiFactionInvite extends GuiCastel {
         startGlScissor(x, y, width, height);
         String toolTip = "";
         List<String> filtered = (seeInvite ? invites.keySet() : playerList).stream().filter(name -> name.toLowerCase().contains(this.filter.getText().toLowerCase())).collect(Collectors.toList());
+        this.selectedPlayer = "";
         for (int i = 0; i < filtered.size(); i++) {
             String playerName = filtered.get(i);
             int offsetX = x;
             Float offsetY = Float.valueOf((y + i * 18) + getSlideOnline(filtered, scrollbar));
             this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
-            blit(matrixStack, offsetX+5, offsetY.intValue(), 54, 233, 183, 18);
+            blit(matrixStack, offsetX+5, offsetY.intValue(), 54, 233, 198, 18);
+            if (seeInvite || invites.containsKey(playerName))
+                blit(matrixStack, offsetX+width-20, offsetY.intValue(), 240, 16, 16, 16);
+            else
+                blit(matrixStack, offsetX+width-20, offsetY.intValue(), 240, 32, 16, 16);
+
+
             ResourceLocation resourceLocation = AbstractClientPlayerEntity.getLocationSkin("_KrishenK_");
             AbstractClientPlayerEntity.getDownloadImageSkin(resourceLocation, "_KrishenK_");
             this.minecraft.getTextureManager().bindTexture(resourceLocation);
             blit(matrixStack, offsetX + 6, offsetY.intValue() + 4, 8, 8, 8, 8, 64, 64);
+
             this.minecraft.fontRenderer.drawString(matrixStack, playerName, offsetX + 20, offsetY.intValue() + 4, color);
-            if (mouseX >= offsetX + 6 && mouseX <= offsetX + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F )
+            if (mouseX >= offsetX + 6 && mouseX <= offsetX + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
                 toolTip = playerName;
+            else {
+                boolean hoverAction = mouseX >= offsetX + width - 20 && mouseX <= offsetX + width - 4 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F;
+                if (seeInvite || invites.containsKey(playerName)) {
+                    if (hoverAction) {
+                        toolTip = "Cancel invitation";
+                        this.selectedPlayer = playerName;
+                    }
+                    else if (mouseX >= offsetX + 20 && mouseX <= offsetX + width && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
+                        toolTip = "Invited by " + invites.get(playerName);
+                } else if (hoverAction) {
+                    toolTip = "Invite";
+                    this.selectedPlayer = playerName;
+                }
+            }
+
         }
         endGlScissor();
         if(!toolTip.isEmpty())
             this.renderTooltip(matrixStack, new StringTextComponent(toolTip), mouseX, mouseY);
+    }
+
+    public void setPlayerList(List<String> playerList) {
+        this.playerList = playerList;
+    }
+
+    public void setInvites(Map<String, String> invites) {
+        this.invites = invites;
+    }
+
+    public static GuiFactionInvite getINSTANCE() {
+        return INSTANCE;
     }
 }

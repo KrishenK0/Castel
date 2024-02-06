@@ -41,7 +41,12 @@ public class FactionInSCPacket {
         }
 
         public static void handlePacket(FactionInSCPacket msg, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> Minecraft.getInstance().displayGuiScreen(new GuiFactionInvite(msg.player, msg.invites)));
+            ctx.get().enqueueWork(() -> {
+                if (GuiFactionInvite.getINSTANCE() != null) {
+                    GuiFactionInvite.getINSTANCE().setInvites(msg.invites);
+                    GuiFactionInvite.getINSTANCE().setPlayerList(msg.player);
+                } else Minecraft.getInstance().displayGuiScreen(new GuiFactionInvite(msg.player, msg.invites));
+            });
             ctx.get().setPacketHandled(true);
         }
     }
