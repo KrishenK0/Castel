@@ -46,10 +46,10 @@ public class GuiTab {
         for (int i = 0; i < tabs.getTabs().size(); i++) {
 
             if (i % 2 == 0)
-                AbstractGui.blit(matrixStack, guiX-16, guiY+8+35*di, i*16, i * 16, 16, 16, 102, 16);
+                AbstractGui.blit(matrixStack, guiX-16, guiY+8+35*di, i*16, i * 16, 16, 16, 138, 16);
             //this.gui.blit(matrixStack, guiX - 20, guiY + 26 + 50 * i, 16 * i, 265, 16, 16, 16, 16, 102, 16);
             else {
-                AbstractGui.blit(matrixStack, guiX+xSize, guiY+8+35*di, i*16, i * 16, 16, 16, 102, 16);
+                AbstractGui.blit(matrixStack, guiX+xSize, guiY+8+35*di, i*16, i * 16, 16, 16, 138, 16);
                 di++;
             }
         }
