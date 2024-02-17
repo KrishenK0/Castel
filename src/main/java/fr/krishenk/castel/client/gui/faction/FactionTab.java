@@ -22,7 +22,8 @@ public class FactionTab extends AbastractGuiTab {
         flag,
         perm,
         bank,
-        invite
+        invite,
+        claims
     }
 
     protected ResourceLocation ICONS_TAB_LOCATION = new ResourceLocation(Castel.MODID, "textures/gui/faction-tab.png");
@@ -103,6 +104,19 @@ public class FactionTab extends AbastractGuiTab {
             @Override
             public Button.IPressable getPressedAction() {
                 return button -> PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(Tab.invite));
+            }
+        });
+
+        TABS.add(new ITab() {
+            @Override
+            public Class<? extends Screen> getClassReferent() {
+                return GuiFactionClaims.class;
+            }
+            @Override
+            public ITextComponent getTitle() { return GuiFactionClaims.title; }
+            @Override
+            public Button.IPressable getPressedAction() {
+                return button -> PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(Tab.claims));
             }
         });
     }

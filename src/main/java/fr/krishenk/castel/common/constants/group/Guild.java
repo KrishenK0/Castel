@@ -1,6 +1,7 @@
 package fr.krishenk.castel.common.constants.group;
 
 import fr.krishenk.castel.common.fperms.Rank;
+import fr.krishenk.castel.common.utils.SimpleChunkLocation;
 import fr.krishenk.castel.common.utils.TimeUtils;
 import net.minecraft.inventory.Inventory;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 public class Guild extends Group {
     static Guild INSTANCE;
-//    private Set<SimpleChunkLocation> lands;
+    private Set<SimpleChunkLocation> lands;
 //    private Map<Powerup, Integer> powerups;
 //    private Map<MiscUpgrade, Integer> miscUpgrades;
 //    private Map<String, InviteCode> inviteCodes;
@@ -22,9 +23,10 @@ public class Guild extends Group {
     private boolean pacifist;
     private int maxLandsModifier;
 
-    public Guild(UUID id, UUID leader, String leaderName, String name, String tag, long since, List<String> membersOnline, List<String> membersOffline, List<Rank> ranks, double publicHomeCost, boolean publicHome, Color color, double bank, String tax, String flag, long resourcePoints, boolean requiresInvite, boolean permanent, boolean hidden, Set<UUID> mails, Map<UUID, Long> challenges, Inventory chest, String lore, boolean pacifist, int maxLandsModifier) {
+    public Guild(UUID id, UUID leader, String leaderName, String name, String tag, long since, List<String> membersOnline, List<String> membersOffline, List<Rank> ranks, double publicHomeCost, boolean publicHome, Color color, double bank, String tax, String flag, long resourcePoints, boolean requiresInvite, boolean permanent, boolean hidden, Set<UUID> mails, Set<SimpleChunkLocation> lands, Map<UUID, Long> challenges, Inventory chest, String lore, boolean pacifist, int maxLandsModifier) {
         super(id, leader, leaderName, name, tag, since, membersOnline, membersOffline, ranks, publicHomeCost, publicHome, color, bank, tax, flag, resourcePoints, requiresInvite, permanent, hidden, mails);
         INSTANCE = this;
+        this.lands = lands;
         this.challenges = challenges;
         this.chest = chest;
         this.lore = lore;
@@ -103,6 +105,14 @@ public class Guild extends Group {
 
     public void setMaxLandsModifier(int maxLandsModifier) {
         this.maxLandsModifier = maxLandsModifier;
+    }
+
+    public Set<SimpleChunkLocation> getLands() {
+        return lands;
+    }
+
+    public void setLands(Set<SimpleChunkLocation> lands) {
+        this.lands = lands;
     }
 
     private class Powerup {
@@ -192,6 +202,8 @@ public class Guild extends Group {
         public String getCode() {
             return code;
         }
+
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import fr.krishenk.castel.client.gui.faction.GuiFaction;
 import fr.krishenk.castel.common.constants.group.Guild;
 import fr.krishenk.castel.common.fperms.Rank;
+import fr.krishenk.castel.common.utils.SimpleChunkLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -55,7 +56,7 @@ public class FactionMaSCPacket {
         boolean hidden = buf.readBoolean();
         String mailsStr = buf.readString();
         Set<UUID> mails = !mailsStr.equals("{}") ? new Gson().fromJson(mailsStr, new TypeToken<Set<UUID>>(){}.getType()) : null;
-//        Set<SimpleChunkLocation> lands;
+        Set<SimpleChunkLocation> lands = new Gson().fromJson(buf.readString(), new TypeToken<Set<SimpleChunkLocation>>(){}.getType());
 //        Map<Guild.Powerup, Integer> powerups;
 //        Map<Guild.MiscUpgrade, Integer> miscUpgrades;
 //        Map<String, Guild.InviteCode> inviteCodes;
@@ -67,7 +68,7 @@ public class FactionMaSCPacket {
         boolean pacifist = buf.readBoolean();
         int maxLandsModifier = buf.readInt();
 
-        Guild guild = new Guild(id, leader, leaderName, name, tag, since, membersOnline, membersOffline, ranks, publicHomeCost, publicHome, color, bank, tax, flag, resourcePoints, requiresInvite, permanent, hidden, mails, challenges, chest, lore, pacifist, maxLandsModifier);
+        Guild guild = new Guild(id, leader, leaderName, name, tag, since, membersOnline, membersOffline, ranks, publicHomeCost, publicHome, color, bank, tax, flag, resourcePoints, requiresInvite, permanent, hidden, mails, lands, challenges, chest, lore, pacifist, maxLandsModifier);
 
 
 

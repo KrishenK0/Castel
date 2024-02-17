@@ -56,7 +56,7 @@ public class SimpleChunkLocation implements Cloneable {
     }
 
     public String toString() {
-        return this.world + ", " + this.x + ", " + this.z;
+        return '{'+this.world + ", " + this.x + ", " + this.z+'}';
     }
 
     public static class WorldlessWrapper {
