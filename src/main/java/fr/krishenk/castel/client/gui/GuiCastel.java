@@ -68,10 +68,15 @@ public abstract class GuiCastel extends Screen {
         GL11.glPopMatrix();
     }
 
+    public void drawCenteredString(MatrixStack matrixStack, String text, int x, int y, int color) {
+        drawScaledString(matrixStack, text, x-this.font.getStringWidth(text)/2, y, 1F, color);
+    }
+
+
     public void drawScaledCenteredString(MatrixStack matrixStack, String text, int x, int y, float scale, int color) {
         GL11.glPushMatrix();
         GL11.glScaled(scale, scale, scale);
-        this.minecraft.fontRenderer.drawStringWithTransparency(matrixStack, text, (int)(x - this.minecraft.fontRenderer.getStringWidth(text) * scale / 2)/scale, y/scale, color, true);
+        this.font.drawStringWithTransparency(matrixStack, text, (int)(x - this.font.getStringWidth(text) * scale / 2)/scale, y/scale, color, true);
         GL11.glPopMatrix();
         //GL11.glColor4f(1F, 1F, 1F, 1F);
     }
