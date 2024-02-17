@@ -17,6 +17,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.antlr.v4.runtime.misc.Triple;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiFationPerm extends GuiCastel {
@@ -45,7 +46,7 @@ public class GuiFationPerm extends GuiCastel {
         this.toolTip = "";
         renderHeader(matrixStack, mouseX, mouseY);
         renderRows(matrixStack, mouseX, mouseY);
-        this.permScrollBar.drawScroller(matrixStack);
+        this.permScrollBar.render(Arrays.asList(PermissableAction.values()), matrixStack);
         if (!this.toolTip.isEmpty())
             this.renderTooltip(matrixStack, new StringTextComponent(this.toolTip), mouseX, mouseY);
     }
@@ -109,23 +110,21 @@ public class GuiFationPerm extends GuiCastel {
             if (rank.getPriority() == 0) continue;
             List<Rank.Permission> perms = rank.getPermissions();
             for (PermissableAction permAction : PermissableAction.values()) {
-
                 Boolean access = perms.stream().anyMatch(p ->  p.getNamespace().getKey().equals(permAction.getName().toUpperCase()));
-//                if (access == null) continue;
 
                 int offsetX = this.guiX+28 + j*25;
-                Float offsetY = Float.valueOf((this.guiY+52 + i*20) + getSlideOnline());
+                float offsetY = (this.guiY + 52 + i * 20) + permScrollBar.getSlideOffset(Arrays.asList(PermissableAction.values()), 20);
                 if (j == 0) {
                     if ((i+1) % 16 == 0) dv++;
-                    blit(matrixStack, offsetX, offsetY.intValue(), 1+18*(i%15), 168+18*dv, 16, 16, xSize, ySize);
+                    blit(matrixStack, offsetX, (int) offsetY, 1+18*(i%15), 168+18*dv, 16, 16, xSize, ySize);
                     if (i != perms.size()-1)
-                        this.hLine(matrixStack, offsetX, offsetX+225, offsetY.intValue()+18, 0xFF000000);
+                        this.hLine(matrixStack, offsetX, offsetX+225, (int) offsetY +18, 0xFF000000);
                     if (mouseY >= this.guiY+50 && mouseY <= this.guiY+150) {
                         if (mouseX >= offsetX && mouseX <= offsetX + 16 && mouseY >= offsetY && mouseY <= offsetY + 16)
                             setToolTip(permAction.getDescription());
                     }
                 }
-                blit(matrixStack, offsetX+28, offsetY.intValue(), (access ? 1 : 19) , 235, 16, 16, xSize, ySize);
+                blit(matrixStack, offsetX+28, (int) offsetY, (access ? 1 : 19) , 235, 16, 16, xSize, ySize);
 
                 if (mouseY >= this.guiY+50 && mouseY <= this.guiY+150) {
                     if (mouseX >= offsetX+28 && mouseX <= offsetX+46 && mouseY >= offsetY && mouseY <= offsetY+18) {
@@ -138,12 +137,6 @@ public class GuiFationPerm extends GuiCastel {
             j++;
         }
         super.endGlScissor();
-    }
-
-    private float getSlideOnline() {
-        return (PermissableAction.values().length > 4)
-                ? (-((PermissableAction.values().length - 4) * 20) * permScrollBar.getSliderValue())
-                : 0.0F;
     }
 
     private void setToolTip(String toolTip) {

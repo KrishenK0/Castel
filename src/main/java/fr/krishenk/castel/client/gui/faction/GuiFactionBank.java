@@ -51,8 +51,8 @@ public class GuiFactionBank extends GuiCastel {
             this.renderTooltip(matrixStack, new StringTextComponent("Open faction chest"), mouseX, mouseY);
         } else blit(matrixStack, this.guiX + 77, this.guiY + 40, 0, 236,54, 40, xSize, ySize);
 
-        this.deficitsScrollbar.drawScroller(matrixStack);
-        this.benefitsScrollbar.drawScroller(matrixStack);
+        this.deficitsScrollbar.render(this.deficits, matrixStack);
+        this.benefitsScrollbar.render(this.benefits, matrixStack);
 
         renderPlayerList(matrixStack, this.guiX + 15, this.guiY + 141, 75, 80, 0x00AD2B, mouseX, mouseY, this.benefits, benefitsScrollbar);
         renderPlayerList(matrixStack, this.guiX + 110, this.guiY + 141, 75, 80, 0xFF0000, mouseX, mouseY, this.deficits, deficitsScrollbar);
@@ -93,27 +93,20 @@ public class GuiFactionBank extends GuiCastel {
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
-    private float getSlideOnline(List<?> playerList, ScrollBar scollerbar) {
-        return (playerList.size() > 4)
-                ? (-((playerList.size() - 4) * 17) * scollerbar.getSliderValue())
-                : 0.0F;
-    }
-
     private void renderPlayerList(MatrixStack matrixStack, int x, int y, int width, int height, int color, int mouseX, int mouseY, List<? extends BankLog> logs, ScrollBar scrollbar) {
         startGlScissor(x, y, width, height);
         String toolTip = "";
         for (int i = 0; i < logs.size(); i++) {
             BankLog log = logs.get(i);
-            int offsetX = x;
-            Float offsetY = Float.valueOf((y + i * 18) + getSlideOnline(logs, scrollbar));
+            float offsetY = (y + i * 18) + scrollbar.getSlideOffset(logs);
             this.minecraft.getTextureManager().bindTexture(fr.krishenk.castel.client.gui.widget.ScrollBar.WIDGET_LOCATION);
-            blit(matrixStack, offsetX, offsetY.intValue(), 0, 206, 76, 18, 256, 256);
+            blit(matrixStack, x, (int) offsetY, 0, 206, 76, 18, 256, 256);
             ResourceLocation resourceLocation = AbstractClientPlayerEntity.getLocationSkin("_KrishenK_");
             AbstractClientPlayerEntity.getDownloadImageSkin(resourceLocation, "_KrishenK_");
             this.minecraft.getTextureManager().bindTexture(resourceLocation);
-            blit(matrixStack, offsetX + 6, offsetY.intValue() + 4, 8, 8, 8, 8, 64, 64);
-            this.minecraft.fontRenderer.drawString(matrixStack, String.valueOf(log.getAmount()), offsetX + 20, offsetY.intValue() + 4, color);
-            if (mouseX >= offsetX + 6 && mouseX <= offsetX + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F )
+            blit(matrixStack, x + 6, (int) offsetY + 4, 8, 8, 8, 8, 64, 64);
+            this.minecraft.fontRenderer.drawString(matrixStack, String.valueOf(log.getAmount()), x + 20, (int) offsetY + 4, color);
+            if (mouseX >= x + 6 && mouseX <= x + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F )
                 toolTip = log.getPlayer();
         }
         endGlScissor();

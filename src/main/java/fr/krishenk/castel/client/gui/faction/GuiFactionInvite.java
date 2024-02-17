@@ -87,6 +87,9 @@ public class GuiFactionInvite extends GuiCastel {
             PacketHandler.CHANNEL.sendToServer(new FactionGuiCSPacket(FactionTab.Tab.invite));
         }
 
+        if (this.playersScrollBar.isMouseHover(mouseX, mouseY) && button == 0)
+            this.playersScrollBar.setScrollValuePosY(mouseY);
+
         if (button == 0 && mouseX >= this.guiX+205 && mouseX <= this.guiX+224 && mouseY >= this.guiY+47 && mouseY <= this.guiY+65) {
             this.seeInvite = !this.seeInvite;
         }
@@ -126,9 +129,10 @@ public class GuiFactionInvite extends GuiCastel {
             this.renderTooltip(matrixStack, new StringTextComponent("See invitations"), mouseX, mouseY);
 
         // Playerlist
-        this.playersScrollBar.drawScroller(matrixStack);
+        List<String> filtered = (seeInvite ? invites.keySet() : playerList).stream().filter(name -> name.toLowerCase().contains(this.filter.getText().toLowerCase())).collect(Collectors.toList());
+        this.playersScrollBar.render(filtered, matrixStack);
         if (this.playerList != null && !this.playerList.isEmpty())
-            renderPlayerList(matrixStack, this.guiX + 18, this.guiY + 90, 198, 123, TextFormatting.WHITE.getColor(), mouseX, mouseY, playersScrollBar);
+            renderPlayerList(matrixStack, this.guiX + 18, this.guiY + 90, 198, 123, TextFormatting.WHITE.getColor(), mouseX, mouseY, filtered, playersScrollBar);
     }
 
     @Override
@@ -139,45 +143,37 @@ public class GuiFactionInvite extends GuiCastel {
         return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
-    private float getSlideOnline(List<?> playerList, ScrollBar scollerbar) {
-        return (playerList.size() > 4)
-                ? (-((playerList.size() - 4) * 15) * scollerbar.getSliderValue())
-                : 0.0F;
-    }
-
-    private void renderPlayerList(MatrixStack matrixStack, int x, int y, int width, int height, int color, int mouseX, int mouseY, ScrollBar scrollbar) {
+    private void renderPlayerList(MatrixStack matrixStack, int x, int y, int width, int height, int color, int mouseX, int mouseY, List<String> filtered, ScrollBar scrollbar) {
         startGlScissor(x, y, width, height);
         String toolTip = "";
-        List<String> filtered = (seeInvite ? invites.keySet() : playerList).stream().filter(name -> name.toLowerCase().contains(this.filter.getText().toLowerCase())).collect(Collectors.toList());
         this.selectedPlayer = "";
         for (int i = 0; i < filtered.size(); i++) {
             String playerName = filtered.get(i);
-            int offsetX = x;
-            Float offsetY = Float.valueOf((y + i * 18) + getSlideOnline(filtered, scrollbar));
+            float offsetY = (y + i * 18) + scrollbar.getSlideOffset(filtered);
             this.minecraft.getTextureManager().bindTexture(this.GUI_TEXTURE);
-            blit(matrixStack, offsetX+5, offsetY.intValue(), 54, 233, 198, 18);
+            blit(matrixStack, x +5, (int) offsetY, 54, 233, 198, 18);
             if (seeInvite || invites.containsKey(playerName))
-                blit(matrixStack, offsetX+width-20, offsetY.intValue(), 240, 16, 16, 16);
+                blit(matrixStack, x +width-20, (int) offsetY, 240, 16, 16, 16);
             else
-                blit(matrixStack, offsetX+width-20, offsetY.intValue(), 240, 32, 16, 16);
+                blit(matrixStack, x +width-20, (int) offsetY, 240, 32, 16, 16);
 
 
             ResourceLocation resourceLocation = AbstractClientPlayerEntity.getLocationSkin("_KrishenK_");
             AbstractClientPlayerEntity.getDownloadImageSkin(resourceLocation, "_KrishenK_");
             this.minecraft.getTextureManager().bindTexture(resourceLocation);
-            blit(matrixStack, offsetX + 6, offsetY.intValue() + 4, 8, 8, 8, 8, 64, 64);
+            blit(matrixStack, x + 6, (int) offsetY + 4, 8, 8, 8, 8, 64, 64);
 
-            this.minecraft.fontRenderer.drawString(matrixStack, playerName, offsetX + 20, offsetY.intValue() + 4, color);
-            if (mouseX >= offsetX + 6 && mouseX <= offsetX + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
+            this.minecraft.fontRenderer.drawString(matrixStack, playerName, x + 20, (int) offsetY + 4, color);
+            if (mouseX >= x + 6 && mouseX <= x + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
                 toolTip = playerName;
             else {
-                boolean hoverAction = mouseX >= offsetX + width - 20 && mouseX <= offsetX + width - 4 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F;
+                boolean hoverAction = mouseX >= x + width - 20 && mouseX <= x + width - 4 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F;
                 if (seeInvite || invites.containsKey(playerName)) {
                     if (hoverAction) {
                         toolTip = "Cancel invitation";
                         this.selectedPlayer = playerName;
                     }
-                    else if (mouseX >= offsetX + 20 && mouseX <= offsetX + width && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
+                    else if (mouseX >= x + 20 && mouseX <= x + width && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F)
                         toolTip = "Invited by " + invites.get(playerName);
                 } else if (hoverAction) {
                     toolTip = "Invite";

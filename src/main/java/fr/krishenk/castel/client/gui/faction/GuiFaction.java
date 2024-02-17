@@ -56,8 +56,8 @@ public class GuiFaction extends GuiCastel {
         // Draw members list
         renderPlayerList(matrixStack, this.guiX + 27, this.guiY + 135, 81, 86, TextFormatting.WHITE.getColor(), mouseX, mouseY, getGuild().getMembersOnline(), onlineScrollBar);
         renderPlayerList(matrixStack, this.guiX + 123, this.guiY + 135, 81, 86, TextFormatting.GRAY.getColor(), mouseX, mouseY, getGuild().getMembersOffline(), offlineScrollBar);
-        this.onlineScrollBar.drawScroller(matrixStack);
-        this.offlineScrollBar.drawScroller(matrixStack);
+        this.onlineScrollBar.render(getGuild().getMembersOnline(), matrixStack);
+        this.offlineScrollBar.render(getGuild().getMembersOffline(), matrixStack);
         super.drawScaledString(matrixStack, "Leader: " + super.getGuild().getLeaderName(), this.guiX + 25, this.guiY + 109, .75F, 0xFFFFFFFF);
     }
 
@@ -97,27 +97,20 @@ public class GuiFaction extends GuiCastel {
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
-    private float getSlideOnline(List<?> playerList, ScrollBar scollerbar) {
-        return (playerList.size() > 4)
-                ? (-((playerList.size() - 4) * 15) * scollerbar.getSliderValue())
-                : 0.0F;
-    }
-
     private void renderPlayerList(MatrixStack matrixStack, int x, int y, int width, int height, int color, int mouseX, int mouseY, List<? extends String> playerList, ScrollBar scrollbar) {
         startGlScissor(x, y, width, height);
         String toolTip = "";
         for (int i = 0; i < playerList.size(); i++) {
             String playerName = playerList.get(i);
-            int offsetX = x;
-            Float offsetY = Float.valueOf((y + i * 18) + getSlideOnline(playerList, scrollbar));
+            float offsetY = (y + i * 18) + scrollbar.getSlideOffset(playerList);
             this.minecraft.getTextureManager().bindTexture(fr.krishenk.castel.client.gui.widget.ScrollBar.WIDGET_LOCATION);
-            blit(matrixStack, offsetX, offsetY.intValue(), 0, 206, 76, 18, 256, 256);
+            blit(matrixStack, x, (int) offsetY, 0, 206, 76, 18, 256, 256);
             ResourceLocation resourceLocation = AbstractClientPlayerEntity.getLocationSkin("_KrishenK_");
             AbstractClientPlayerEntity.getDownloadImageSkin(resourceLocation, "_KrishenK_");
             this.minecraft.getTextureManager().bindTexture(resourceLocation);
-            blit(matrixStack, offsetX + 6, offsetY.intValue() + 4, 8, 8, 8, 8, 64, 64);
-            this.minecraft.fontRenderer.drawString(matrixStack, playerName, offsetX + 20, offsetY.intValue() + 4, color);
-            if (mouseX >= offsetX + 6 && mouseX <= offsetX + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F )
+            blit(matrixStack, x + 6, (int) offsetY + 4, 8, 8, 8, 8, 64, 64);
+            this.minecraft.fontRenderer.drawString(matrixStack, playerName, x + 20, (int) offsetY + 4, color);
+            if (mouseX >= x + 6 && mouseX <= x + 14 && mouseY >= offsetY + 4F && mouseY <= offsetY + 12F )
                 toolTip = playerName;
         }
         endGlScissor();
