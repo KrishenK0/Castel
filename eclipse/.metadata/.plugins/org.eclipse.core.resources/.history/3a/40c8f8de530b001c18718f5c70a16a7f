@@ -1,5 +1,0 @@
-package fr.krishenk.castel.client.gui;
-
-public class GuiKeyHandler extends KeyHandler {
-
-}

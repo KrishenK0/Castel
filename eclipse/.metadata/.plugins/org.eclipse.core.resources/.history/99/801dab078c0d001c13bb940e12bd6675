@@ -1,5 +1,0 @@
-package fr.krishenk.castel.server.packet.impl;
-
-public class FactionInfoPacket {
-
-}
